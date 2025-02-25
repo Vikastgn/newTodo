@@ -11,7 +11,8 @@ export const appSlice = createSlice({
         themeMode: 'light' as ThemeMode,
         status: 'idle' as RequestStatus,
         error: null as string | null,
-        isLoggedIn: false
+        isLoggedIn: false,
+        captchaUrl: null as string | null
     },
     reducers: create => ({
         changeTheme: create.reducer<{ themeMode: ThemeMode }>((state, action) => {
@@ -25,6 +26,9 @@ export const appSlice = createSlice({
         }),
         setIsLoggedIn: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
             state.isLoggedIn = action.payload.isLoggedIn
+        }),
+        setCaptchaUrl: create.reducer<{ captchaUrl: string | null  }>((state, action) => { // Новый редюсер для установки URL капчи
+            state.captchaUrl = action.payload.captchaUrl;
         }),
     }),// решаем проблему с крутилками
     extraReducers: builder => {
@@ -50,10 +54,11 @@ export const appSlice = createSlice({
         selectStatus: (state) => state.status,
         selectError: (state) => state.error,
         selectIsLoggedIn: state => state.isLoggedIn,
+        selectCaptchaUrl: (state) => state.captchaUrl,
     }
 })
 
-export const {changeTheme, setAppError, setAppStatus, setIsLoggedIn} = appSlice.actions
+export const {changeTheme, setAppError, setIsLoggedIn, setCaptchaUrl} = appSlice.actions
 export const {selectThemeMode, selectStatus,
-    selectError, selectIsLoggedIn} = appSlice.selectors
+    selectError, selectIsLoggedIn, selectCaptchaUrl} = appSlice.selectors
 export const appReducer = appSlice.reducer

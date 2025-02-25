@@ -1,7 +1,7 @@
 import {BaseResponse} from "common/types";
-import {instance} from "common/instance/instance";
 import {baseApi} from "app/baseApi";
 import {Inputs} from "../../ todolists/lib/hooks/useLogin";
+import {CaptchaResponse} from "./authApi.types";
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: build => ({
@@ -25,23 +25,22 @@ export const authApi = baseApi.injectEndpoints({
                 }
             },
         }),
+        getCaptchaUrl: build.query<CaptchaResponse, void>({
+            query: () => {
+                return{
+                    method: 'GET',
+                    url: 'security/get-captcha-url',
+                }
+            }
+        }),
+
     }),
 })
 
 export const {
     useMeQuery,
     useLoginMutation,
-    useLogoutMutation
+    useLogoutMutation,
+    useLazyGetCaptchaUrlQuery,
 } = authApi
 
-export const _authApi = {
-    login(payload: Inputs) {
-        return instance.post<BaseResponse<{ userId: number; token: string }>>(`auth/login`, payload)
-    },
-    logout() {
-        return instance.delete<BaseResponse>('auth/login')
-    },
-    me() {
-        return instance.get<BaseResponse<{ id: number; email: string; login: string }>>('auth/me')
-    },
-}

@@ -7,7 +7,7 @@ import {Controller} from "react-hook-form";
 import s from './Login.module.css'
 
 export const LoginForm = () => {
-    const { onSubmit, handleSubmit, errors, register, control } = useLogin()
+    const {onSubmit, handleSubmit, errors, register, control, captchaUrl} = useLogin()
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -44,10 +44,23 @@ export const LoginForm = () => {
                         <Controller
                             name={'rememberMe'}
                             control={control}
-                            render={({ field: { value, ...field } }) => <Checkbox {...field} checked={value} />}
+                            render={({field: {value, ...field}}) => <Checkbox {...field} checked={value}/>}
                         />
                     }
                 />
+                {captchaUrl && (
+                    <>
+                        <img src={captchaUrl} alt="Captcha"/>
+                        <TextField
+                            label="Captcha"
+                            margin="normal"
+                            {...register('captcha', {
+                                required: 'Captcha is required'
+                            })}
+                        />
+                        {errors.captcha && <span className={s.errorMessage}>{errors.captcha.message}</span>}
+                    </>
+                )}
                 <Button type={'submit'} variant={'contained'} color={'primary'}>
                     Login
                 </Button>
